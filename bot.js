@@ -1,16 +1,14 @@
 const Insta = require("@ber4tbey/insta.js");
-const { Configuration, OpenAIApi } = require("openai");
+const OpenAI = require("openai");
 const client = new Insta.Client();
 
-const config = new Configuration({
+// Updated OpenAI initialization
+const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai = new OpenAIApi(config);
 const OWNER_IDS = process.env.OWNER_IDS.split(',');
-let lastMessageTime = 0; // Track last message timestamp
-
-// Message queue system
+let lastMessageTime = 0;
 const messageQueue = [];
 let isProcessing = false;
 
@@ -27,7 +25,6 @@ async function processQueue() {
         console.error('Message send error:', error);
     }
     
-    // Add 1-second delay between messages
     setTimeout(() => {
         isProcessing = false;
         processQueue();
@@ -47,25 +44,23 @@ client.on('messageCreate', async (message) => {
         const mention = isGroup ? `@${message.author.username} ` : '';
 
         if (isGroup) {
-            // Add group response to queue
             messageQueue.push({
                 chat: message.chat,
-                content: `${mention} OYY MSG MT KR VRNA TERI MAA XHOD DUNGA 🤱😆`
+                content: `${mention}OYY MSG MT KR YAAR`
             });
             return processQueue();
         }
 
-        // Handle DMs
         if (['hi', 'hello', 'hey'].some(greet => message.content.toLowerCase().includes(greet))) {
             messageQueue.push({
                 chat: message.chat,
-                content: `${mention} What's up! HRSS built this — hit up his Instagram!: https://instagram.com/1.0hrsss`
+                content: `${mention}VENOM IS MY DEVELOPER CHECK OUT HIS CHANNEL: https://youtube.com/c/VenomExE`
             });
             return processQueue();
         }
 
-        // Generate AI response
-        const response = await openai.createChatCompletion({
+        // Updated chat completion syntax
+        const response = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [{ role: "user", content: message.content }],
             temperature: 0.7,
@@ -73,7 +68,7 @@ client.on('messageCreate', async (message) => {
 
         messageQueue.push({
             chat: message.chat,
-            content: response.data.choices[0].message.content
+            content: response.choices[0].message.content
         });
         processQueue();
 
