@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Insta = require("@ber4tbey/insta.js");
 const OpenAI = require("openai");
 const client = new Insta.Client();
@@ -46,7 +48,7 @@ client.on('messageCreate', async (message) => {
         if (isGroup) {
             messageQueue.push({
                 chat: message.chat,
-                content: `${mention}OYY MSG MT KR YAAR`
+                content: `${mention} OYY MSG MT KR YAAR`
             });
             return processQueue();
         }
@@ -54,7 +56,7 @@ client.on('messageCreate', async (message) => {
         if (['hi', 'hello', 'hey'].some(greet => message.content.toLowerCase().includes(greet))) {
             messageQueue.push({
                 chat: message.chat,
-                content: `${mention}VENOM IS MY DEVELOPER CHECK OUT HIS CHANNEL: https://youtube.com/c/VenomExE`
+                content: `${mention} HRSS IS MY DEVELOPER CHECK OUT HIS CHANNEL: https://instagram.com/1.0hrsss`
             });
             return processQueue();
         }
